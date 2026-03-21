@@ -1,0 +1,448 @@
+/* ========== External CSS - Student Feedback Registration Form ========== */
+/* Sub Task 2: External CSS */
+
+/* Google Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* CSS Reset & Base */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    padding: 40px 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* ===== Background Particles ===== */
+.bg-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: drift 20s infinite ease-in-out;
+}
+
+.particle-1 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #6366f1, transparent);
+    top: -80px;
+    right: -80px;
+    animation-delay: 0s;
+}
+
+.particle-2 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, #a855f7, transparent);
+    bottom: -60px;
+    left: -60px;
+    animation-delay: -5s;
+}
+
+.particle-3 {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, #ec4899, transparent);
+    top: 40%;
+    left: 10%;
+    animation-delay: -10s;
+}
+
+.particle-4 {
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, #8b5cf6, transparent);
+    top: 20%;
+    right: 15%;
+    animation-delay: -15s;
+}
+
+@keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -30px) scale(1.1); }
+    50% { transform: translate(-20px, 20px) scale(0.95); }
+    75% { transform: translate(15px, 10px) scale(1.05); }
+}
+
+/* ===== Form Wrapper ===== */
+.form-wrapper {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 48px 44px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: fadeInUp 0.6s ease-out;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Header Section ===== */
+.header-section {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.header-section h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+}
+
+.header-section .subtitle {
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 400;
+}
+
+/* ===== Form Groups ===== */
+.form-group {
+    margin-bottom: 22px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+/* ===== Text Inputs & Select ===== */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #7c5cfc;
+    background: rgba(124, 92, 252, 0.08);
+    box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.15);
+}
+
+/* ===== Select / Dropdown ===== */
+.form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+}
+
+.form-group select option {
+    background: #1e1b4b;
+    color: #ffffff;
+}
+
+/* ===== Radio Button Group ===== */
+.radio-group {
+    display: flex;
+    gap: 24px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.2s;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.radio-label:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(124, 92, 252, 0.3);
+}
+
+.radio-label input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #7c5cfc;
+    cursor: pointer;
+}
+
+.radio-custom {
+    display: none;
+}
+
+/* ===== Error Messages ===== */
+.error-message {
+    font-size: 0.78rem;
+    color: #ff6b6b;
+    margin-top: 6px;
+    display: none;
+    animation: shakeIn 0.3s ease;
+}
+
+.error-message.visible {
+    display: block;
+}
+
+@keyframes shakeIn {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+/* Input error state */
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+    border-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.06);
+}
+
+/* ===== Buttons ===== */
+.button-group {
+    display: flex;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+.btn {
+    flex: 1;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #7c5cfc, #a855f7);
+    color: #ffffff;
+}
+
+.btn-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(124, 92, 252, 0.4);
+}
+
+.btn-submit:hover::before {
+    left: 100%;
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-reset {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-reset:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.btn-reset:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.btn-submit:hover .btn-icon {
+    transform: translateX(4px);
+}
+
+.btn-reset:hover .btn-icon {
+    transform: rotate(-45deg);
+}
+
+/* ===== Success Overlay ===== */
+.success-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.success-overlay.visible {
+    display: flex;
+}
+
+.success-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 40px 50px;
+    text-align: center;
+    animation: popIn 0.4s ease;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.success-checkmark {
+    font-size: 3rem;
+    margin-bottom: 16px;
+}
+
+.success-box h2 {
+    color: #4ade80;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.success-box p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.btn-close-success {
+    padding: 10px 28px;
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-close-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 222, 128, 0.35);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 540px) {
+    .form-wrapper {
+        padding: 32px 24px;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .header-section h1 {
+        font-size: 1.4rem;
+    }
+}
