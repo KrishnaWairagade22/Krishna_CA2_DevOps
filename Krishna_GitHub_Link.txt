@@ -1,0 +1,8 @@
+Student Name: Krishna Wairagade
+PRN: 23070521078
+Subject: DevOps 
+Assignment: CA 2 Task Submission
+
+GitHub Repository Link:
+https://github.com/KrishnaWairagade22/Krishna_CA2_DevOps
+

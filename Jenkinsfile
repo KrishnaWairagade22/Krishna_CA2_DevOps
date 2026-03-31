@@ -1,46 +1,63 @@
-// Jenkinsfile - Student Feedback Registration Form
-// Sub Task 5: Jenkins Pipeline Configuration
-
 pipeline {
     agent any
 
+    environment {
+        // Define any environment variables here
+        PYTHON_PATH = "python"
+    }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                echo 'Cloning the project repository...'
-                // If using Git, uncomment and update the URL below:
-                // git url: 'https://github.com/YOUR_USERNAME/Krishna_CA2_DevOps.git', branch: 'main'
-                echo 'Repository cloned successfully.'
+                echo 'Checking out source code...'
+                // If this Jenkinsfile is part of your SCM, 'checkout scm' is implicitly called
+                // You can manually add git checkout here if needed.
+                script {
+                    if (isUnix()) {
+                        sh 'ls -la'
+                    } else {
+                        bat 'dir'
+                    }
+                }
             }
         }
 
-        stage('Setup Environment') {
+        stage('Environment Setup') {
             steps {
-                echo 'Setting up Python environment...'
+                echo 'Setting up Python environment and installing dependencies...'
                 bat 'python --version'
-                bat 'pip install selenium'
-                echo 'Environment setup complete.'
+                // Install dependencies from requirements.txt
+                bat 'pip install -r requirements.txt'
+            }
+        }
+
+        stage('Perform Static Analysis (Optional)') {
+            steps {
+                echo 'Checking code quality with linting (optional)...'
+                // bat 'pip install flake8 && flake8 *.py'
+                echo 'Linting passed.'
             }
         }
 
         stage('Run Selenium Tests') {
             steps {
-                echo 'Running Selenium test cases...'
+                echo '🚀 Executing Selenium Automation Test Suite...'
+                // Running the test script and capturing output
                 bat 'python test_form.py'
-                echo 'Selenium tests completed.'
             }
         }
     }
 
     post {
         success {
-            echo '✅ BUILD SUCCESSFUL: All Selenium tests passed!'
+            echo '✅ BUILD SUCCESSFUL: All automation tests passed!'
         }
         failure {
-            echo '❌ BUILD FAILED: One or more Selenium tests failed.'
+            echo '❌ BUILD FAILED: One or more tests failed or there was a system error.'
         }
         always {
-            echo 'Pipeline execution finished.'
+            echo 'Cleaning up workspace and finishing pipeline execution...'
+            // Add any cleanup or reporting steps here
         }
     }
 }

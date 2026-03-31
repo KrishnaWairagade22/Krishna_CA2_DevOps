@@ -19,6 +19,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 # -----------------------------------------------
@@ -38,7 +40,17 @@ def get_driver():
     """Create and return a Chrome WebDriver instance."""
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
-    driver = webdriver.Chrome(options=options)
+    
+    # Check for Jenkins or Headless environment variable
+    if os.getenv("GITHUB_ACTIONS") or os.getenv("JENKINS_URL") or os.getenv("HEADLESS") == "true":
+        print("Running in HEADLESS mode...")
+        options.add_argument("--headless=new")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--window-size=1920,1080")
+    
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
 
 
