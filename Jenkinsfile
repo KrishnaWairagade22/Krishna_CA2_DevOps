@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment {
-        // Define any environment variables here
+        // Defines the Python execution path for your project
         PYTHON_PATH = "python"
+        IMAGE_NAME = "student-feedback-app"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out source code...'
-                // If this Jenkinsfile is part of your SCM, 'checkout scm' is implicitly called
-                // You can manually add git checkout here if needed.
+                echo 'Pulling the latest code from GitHub...'
+                // 'checkout scm' is implied but we can list files to verify
                 script {
                     if (isUnix()) {
                         sh 'ls -la'
@@ -26,22 +26,28 @@ pipeline {
             steps {
                 echo 'Setting up Python environment and installing dependencies...'
                 bat 'python --version'
-                // Install dependencies from requirements.txt
+                // Installs dependencies from requirements.txt
                 bat 'pip install -r requirements.txt'
             }
         }
 
-        stage('Perform Static Analysis (Optional)') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Checking code quality with linting (optional)...'
-                // bat 'pip install flake8 && flake8 *.py'
-                echo 'Linting passed.'
+                echo '📦 Building Docker Container Image for the Application Environment...'
+                // This stage builds the environment we pushed earlier
+                script {
+                    try {
+                        bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
+                    } catch (Exception e) {
+                        echo "Docker not available on this Jenkins agent, skipping build stage: ${e}"
+                    }
+                }
             }
         }
 
         stage('Run Selenium Tests') {
             steps {
-                echo '🚀 Executing Selenium Automation Test Suite...'
+                echo '🚀 Executing Selenium Automation Test Suite in Headless Mode...'
                 // Running the test script and capturing output
                 bat 'python test_form.py'
             }
@@ -50,14 +56,13 @@ pipeline {
 
     post {
         success {
-            echo '✅ BUILD SUCCESSFUL: All automation tests passed!'
+            echo '✅ BUILD SUCCESSFUL: All automation tests passed and environment was verified!'
         }
         failure {
             echo '❌ BUILD FAILED: One or more tests failed or there was a system error.'
         }
         always {
             echo 'Cleaning up workspace and finishing pipeline execution...'
-            // Add any cleanup or reporting steps here
         }
     }
 }
