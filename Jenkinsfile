@@ -2,44 +2,35 @@ pipeline {
     agent any
 
     environment {
-        // TIP: If 'python' is not found, change this to your full path:
-        // Example: PYTHON_PATH = "C:\\Users\\YourName\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
-        PYTHON_PATH = "python" 
+        GIT_REPO_URL = "https://github.com/KrishnaWairagade22/Krishna_CA2_DevOps.git"
         IMAGE_NAME = "student-feedback-app"
+        // We will define the local python path dynamically after creation
+        PY_EXE = "venv\\Scripts\\python.exe"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo '🚀 Pulling the latest code from GitHub...'
-                // Explicitly pull the source code into the workspace
-                checkout scm
-                
-                script {
-                    echo 'Current Workspace Contents:'
-                    if (isUnix()) {
-                        sh 'ls -la'
-                    } else {
-                        bat 'dir'
-                    }
-                }
+                echo '🚀 Cloning the latest code from GitHub...'
+                git url: "${GIT_REPO_URL}", branch: 'master'
             }
         }
 
         stage('Environment Setup') {
             steps {
-                echo '🔧 Setting up Python environment...'
+                echo '🔧 Creating Local Virtual Environment (Ensuring independence from System PATH)...'
                 script {
+                    // Try to use the standard python or py launcher to create the environment
                     try {
-                        bat "${PYTHON_PATH} --version"
+                        bat "python -m venv venv"
                     } catch (Exception e) {
-                        echo "Standard 'python' command failed, trying 'py' launcher..."
-                        env.PYTHON_PATH = "py"
-                        bat "${env.PYTHON_PATH} --version"
+                        echo "Standard 'python' failed, trying 'py' launcher..."
+                        bat "py -m venv venv"
                     }
                 }
-                // Install dependencies from requirements.txt
-                bat "${env.PYTHON_PATH} -m pip install -r requirements.txt"
+                // Now that venv is created, install dependencies using the LOCAL python
+                echo '📥 Installing dependencies into local venv...'
+                bat "${PY_EXE} -m pip install -r requirements.txt"
             }
         }
 
@@ -50,7 +41,7 @@ pipeline {
                     try {
                         bat "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
                     } catch (Exception e) {
-                        echo "Docker not available, skipping build stage: ${e.getMessage()}"
+                        echo "Docker not available, skipping build: ${e.getMessage()}"
                     }
                 }
             }
@@ -58,22 +49,19 @@ pipeline {
 
         stage('Run Selenium Tests') {
             steps {
-                echo '🧪 Executing Selenium Automation Test Suite...'
-                // Running the test script using the verified Python path
-                bat "${env.PYTHON_PATH} test_form.py"
+                echo '🧪 Executing Selenium Automation Test Suite (using venv)...'
+                // Running tests using the local venv python confirmed to work
+                bat "${PY_EXE} test_form.py"
             }
         }
     }
 
     post {
         success {
-            echo '✅ BUILD SUCCESSFUL!'
+            echo '✅ BUILD SUCCESSFUL! All environment hurdles cleared.'
         }
         failure {
-            echo '❌ BUILD FAILED: Check the logs above for the error (usually Python path or missing dependencies).'
-        }
-        always {
-            echo 'Finishing pipeline execution...'
+            echo '❌ BUILD FAILED: If still failing, please check if "python" or "py" is installed on this PC.'
         }
     }
 }
