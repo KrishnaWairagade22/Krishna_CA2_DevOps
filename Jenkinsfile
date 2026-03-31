@@ -2,10 +2,13 @@ pipeline {
     agent any
 
     environment {
+        // --- MANDATORY ACTION: CHANGE THIS PATH ---
+        // 1. Run 'where python' in your CMD.
+        // 2. Paste the result here. Note the double backslashes \\
+        PYTHON_EXE = "C:\\Users\\krish\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe" 
+        
         GIT_REPO_URL = "https://github.com/KrishnaWairagade22/Krishna_CA2_DevOps.git"
         IMAGE_NAME = "student-feedback-app"
-        // We will define the local python path dynamically after creation
-        PY_EXE = "venv\\Scripts\\python.exe"
     }
 
     stages {
@@ -18,50 +21,35 @@ pipeline {
 
         stage('Environment Setup') {
             steps {
-                echo '🔧 Creating Local Virtual Environment (Ensuring independence from System PATH)...'
+                echo '🔧 Creating Local Virtual Environment...'
                 script {
-                    // Try to use the standard python or py launcher to create the environment
                     try {
-                        bat "python -m venv venv"
+                        // Using your direct system path to create the venv
+                        bat "\"${PYTHON_EXE}\" -m venv venv"
                     } catch (Exception e) {
-                        echo "Standard 'python' failed, trying 'py' launcher..."
-                        bat "py -m venv venv"
+                        echo "Failed to create venv using ${PYTHON_EXE}. Error: ${e.getMessage()}"
+                        error "BUILD ABORTED: Please check if the PYTHON_EXE path in the Jenkinsfile is correct."
                     }
                 }
-                // Now that venv is created, install dependencies using the LOCAL python
                 echo '📥 Installing dependencies into local venv...'
-                bat "${PY_EXE} -m pip install -r requirements.txt"
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                echo '📦 Building Docker Container Image...'
-                script {
-                    try {
-                        bat "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
-                    } catch (Exception e) {
-                        echo "Docker not available, skipping build: ${e.getMessage()}"
-                    }
-                }
+                bat "venv\\Scripts\\python.exe -m pip install -r requirements.txt"
             }
         }
 
         stage('Run Selenium Tests') {
             steps {
-                echo '🧪 Executing Selenium Automation Test Suite (using venv)...'
-                // Running tests using the local venv python confirmed to work
-                bat "${PY_EXE} test_form.py"
+                echo '🧪 Executing Selenium Automation Test Suite...'
+                bat "venv\\Scripts\\python.exe test_form.py"
             }
         }
     }
 
     post {
         success {
-            echo '✅ BUILD SUCCESSFUL! All environment hurdles cleared.'
+            echo '✅ BUILD SUCCESSFUL!'
         }
         failure {
-            echo '❌ BUILD FAILED: If still failing, please check if "python" or "py" is installed on this PC.'
+            echo '❌ BUILD FAILED: Check folder permissions or Python path.'
         }
     }
 }
