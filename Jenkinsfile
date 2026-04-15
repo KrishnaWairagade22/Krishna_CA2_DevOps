@@ -2,35 +2,48 @@ pipeline {
     agent any
 
     environment {
-        // Updated to use your 'krish' path. If you have a different version than 312, 
-        // you only need to change that number here.
-        PATH = "C:\\Users\\krish\\AppData\\Local\\Programs\\Python\\Python312\\;${env.WORKSPACE}\\venv\\Scripts\\;${env.PATH}"
+        PYTHON = "python"
+        REPORTS_DIR = "reports"
     }
 
     stages {
+
         stage('Checkout') {
             steps {
-                // Pointing to YOUR repository and branch
                 git branch: 'master', url: 'https://github.com/KrishnaWairagade22/Krishna_CA2_DevOps.git'
+            }
+        }
+
+        stage('Setup Virtual Environment') {
+            steps {
+                bat '''
+                    if exist venv rmdir /s /q venv
+                    python -m venv venv
+                '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
                 bat '''
-                if exist venv rmdir /s /q venv
-                python -m venv venv
-                call venv\\Scripts\\activate.bat
-                pip install -r requirements.txt
+                    venv\\Scripts\\pip install --upgrade pip
+                    venv\\Scripts\\pip install -r requirements.txt
                 '''
             }
         }
 
-        stage('Execute Selenium Tests') {
+        stage('Prepare Reports Directory') {
             steps {
                 bat '''
-                call venv\\Scripts\\activate.bat
-                pytest test_form.py -v --junitxml=reports/result.xml
+                    if not exist reports mkdir reports
+                '''
+            }
+        }
+
+        stage('Run Selenium Tests') {
+            steps {
+                bat '''
+                    venv\\Scripts\\pytest test_form.py -v --junitxml=reports/result.xml --tb=short
                 '''
             }
         }
@@ -38,13 +51,13 @@ pipeline {
 
     post {
         always {
-            junit 'reports/result.xml'
+            junit allowEmptyResults: true, testResults: 'reports/result.xml'
         }
         success {
-            echo 'Build and Tests Passed Successfully!'
+            echo 'All tests passed successfully!'
         }
         failure {
-            echo 'Some Tests or Builds Failed. Check the log for details.'
+            echo 'Some tests failed. Check the console output and reports for details.'
         }
     }
 }
