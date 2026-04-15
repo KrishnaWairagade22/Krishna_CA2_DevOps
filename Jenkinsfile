@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        PYTHON = "python"
-        REPORTS_DIR = "reports"
+        // Full absolute path to python.exe — required because Jenkins runs as
+        // SYSTEM service and cannot access the user's PATH
+        PYTHON_EXE = "C:\\Users\\krish\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
     }
 
     stages {
@@ -16,10 +17,10 @@ pipeline {
 
         stage('Setup Virtual Environment') {
             steps {
-                bat '''
+                bat """
                     if exist venv rmdir /s /q venv
-                    python -m venv venv
-                '''
+                    "${PYTHON_EXE}" -m venv venv
+                """
             }
         }
 
