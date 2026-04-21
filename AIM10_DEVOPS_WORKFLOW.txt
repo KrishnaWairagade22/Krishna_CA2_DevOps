@@ -1,0 +1,275 @@
+========================================================
+  AIM 10 — ORGANIZE A WORKING DEVOPS WORKFLOW
+========================================================
+
+AIM: To organize a working DevOps workflow.
+
+========================================================
+  WHAT IS AIM 10?
+========================================================
+
+  Aim 10 is about ORGANIZING and DEMONSTRATING the complete
+  DevOps workflow you built across all previous aims.
+  
+  It is NOT a new tool — it ties everything together with:
+  1. An organized project structure (files in order)
+  2. A complete professional README.md (documentation)
+  3. All code pushed cleanly to GitHub
+  4. A final end-to-end run showing everything works
+
+========================================================
+  THE ORGANIZED DEVOPS WORKFLOW
+========================================================
+
+  PHASE 1 — Plan & Develop
+  ─────────────────────────
+  Tool: HTML + CSS + JS
+  Action: Build the Student Feedback Registration Form
+  File: index.html, styles.css, script.js
+
+  PHASE 2 — Version Control
+  ─────────────────────────
+  Tool: Git + GitHub
+  Action: Track changes, collaborate, maintain history
+  Commands: git add, git commit, git push
+
+  PHASE 3 — Automated Testing
+  ─────────────────────────────
+  Tool: Selenium + pytest
+  Action: Automatically test the web form's UI behavior
+  File: test_form.py, conftest.py, requirements.txt
+
+  PHASE 4 — CI/CD Automation
+  ─────────────────────────────
+  Tool: Jenkins
+  Action: Automatically pull, test, build on every push
+  File: Jenkinsfile (9 stages)
+
+  PHASE 5 — Containerization
+  ─────────────────────────────
+  Tool: Docker
+  Action: Package app into portable container
+  File: Dockerfile, .dockerignore
+
+  PHASE 6 — Multi-Container Management
+  ─────────────────────────────────────
+  Tool: Docker Compose
+  Action: Run web + database + admin panel together
+  File: docker-compose.yml
+
+  PHASE 7 — Delivery
+  ─────────────────────────────────────
+  Tool: Jenkins + Docker (integrated)
+  Action: Jenkins auto-builds image and deploys container
+  Files: Jenkinsfile Stages 8 & 9
+
+========================================================
+  STEP-BY-STEP: PERFORM AIM 10
+========================================================
+
+--------------------------------------------------------
+STEP 1 — Organize and commit all project files
+--------------------------------------------------------
+
+Open PowerShell:
+
+  cd D:\SEM-VI\DevOps\Krishna_CA2_DevOps
+
+Check everything is in order:
+
+  dir
+
+  Expected files:
+  ✅ index.html
+  ✅ styles.css
+  ✅ script.js
+  ✅ test_form.py
+  ✅ conftest.py
+  ✅ requirements.txt
+  ✅ Jenkinsfile
+  ✅ Dockerfile
+  ✅ docker-compose.yml
+  ✅ README.md
+  ✅ .dockerignore
+
+--------------------------------------------------------
+STEP 2 — Push the organized project to GitHub
+--------------------------------------------------------
+
+  git add .
+  git commit -m "Aim 10: Organized complete DevOps workflow"
+  git push origin master
+
+  ✅ Open: https://github.com/KrishnaWairagade22/Krishna_CA2_DevOps
+  Show the examiner the organized repository on GitHub
+
+--------------------------------------------------------
+STEP 3 — Demonstrate the VERSION CONTROL phase
+--------------------------------------------------------
+
+Show the commit history on GitHub:
+
+  git log --oneline -10
+
+  This shows the history of all commits — proves version
+  control has been used throughout the project.
+
+  Also show on GitHub website:
+  → Insights → Network (shows branching and commits)
+
+--------------------------------------------------------
+STEP 4 — Demonstrate the TESTING phase (Selenium)
+--------------------------------------------------------
+
+  venv\Scripts\pytest test_form.py -v
+
+  ✅ All tests should PASS
+  
+  This proves automated testing is working.
+  The browser will open, run all 7 test cases, and close.
+
+--------------------------------------------------------
+STEP 5 — Demonstrate the DOCKER phase
+--------------------------------------------------------
+
+  docker images
+  (shows all Docker images built for this project)
+
+  docker ps
+  (shows running containers)
+
+  Open browser → http://localhost:8081
+  (app running inside Docker container)
+
+--------------------------------------------------------
+STEP 6 — Demonstrate the MULTI-CONTAINER phase
+--------------------------------------------------------
+
+  docker compose up -d
+  (starts 3 containers: web + MySQL DB + Adminer)
+
+  docker compose ps
+  (shows all 3 running)
+
+  Open browser → http://localhost:8082
+  (Adminer DB panel — shows multi-container working)
+
+  docker compose down
+  (clean stop)
+
+--------------------------------------------------------
+STEP 7 — Demonstrate the CI/CD phase (Jenkins)
+--------------------------------------------------------
+
+  Open browser → http://localhost:8080
+  Click your pipeline job → Click "Build Now"
+
+  Show Stage View with all 9 stages green:
+  ✅ Checkout, Build, Venv, Install, Reports,
+  ✅ Selenium Tests, Deploy, Docker Build, Docker Deploy
+
+  This is the FULL automated workflow — one click does everything!
+
+--------------------------------------------------------
+STEP 8 — Show the Final Running Application
+--------------------------------------------------------
+
+  Open browser → http://localhost:8081
+  ✅ Student Feedback Form is LIVE
+
+  This was deployed AUTOMATICALLY by Jenkins + Docker
+  without any manual deployment steps.
+
+========================================================
+  SHOW EXAMINER — ORGANIZED WORKFLOW EVIDENCE
+========================================================
+
+  1. GitHub Repository
+     → https://github.com/KrishnaWairagade22/Krishna_CA2_DevOps
+     → Show organized files, README, commit history
+
+  2. README.md (Professional Documentation)
+     → Shows complete workflow diagram
+     → Lists all tools and their roles
+     → Has project structure, setup instructions
+
+  3. Selenium Tests Running
+     → pytest test_form.py -v (all green)
+
+  4. Docker Containers
+     → docker ps (containers running)
+     → docker images (images built)
+
+  5. Jenkins Pipeline
+     → http://localhost:8080
+     → All 9 stages green in Stage View
+
+  6. Live Application
+     → http://localhost:8081 (working form)
+
+========================================================
+  USEFUL COMMANDS FOR AIM 10
+========================================================
+
+  git log --oneline -10           Show last 10 commits
+  git status                      Show modified files
+  git remote -v                   Show GitHub remote URL
+  docker ps                       Show running containers
+  docker images                   Show all images
+  docker compose ps               Show compose containers
+  docker compose up -d            Start all containers
+  docker compose down             Stop all containers
+  pytest test_form.py -v          Run Selenium tests
+
+========================================================
+  PRACTICAL IS COMPLETE when:
+  ✅ All files organized and pushed to GitHub
+  ✅ README.md shows complete workflow documentation
+  ✅ git log shows organized commit history
+  ✅ Selenium tests PASS
+  ✅ Docker containers are running
+  ✅ Jenkins shows all 9 stages GREEN
+  ✅ App is live at http://localhost:8081
+========================================================
+
+========================================================
+  VIVA ANSWERS — AIM 10
+========================================================
+
+Q: What is a DevOps workflow?
+A: An organized set of practices, tools, and stages that
+   automate the process of developing, testing, and
+   delivering software continuously and reliably.
+
+Q: What are the phases of your DevOps workflow?
+A: Phase 1: Develop (HTML/CSS/JS)
+   Phase 2: Version Control (Git + GitHub)
+   Phase 3: Automated Testing (Selenium)
+   Phase 4: CI/CD (Jenkins)
+   Phase 5: Containerization (Docker)
+   Phase 6: Multi-container (Docker Compose)
+   Phase 7: Automated Delivery (Jenkins + Docker)
+
+Q: How do all tools work together?
+A: A developer pushes code to GitHub. Jenkins detects
+   the change, runs Selenium tests automatically. If
+   tests pass, Jenkins builds a Docker image and deploys
+   it as a container. The app is live without any
+   manual steps.
+
+Q: What is the benefit of an organized DevOps workflow?
+A: Speed: Faster delivery with automation
+   Quality: Bugs caught early by automated tests
+   Consistency: Same process every time, no human error
+   Portability: Docker runs the app anywhere
+   Visibility: GitHub + Jenkins give full traceability
+
+Q: What does "Continuous Integration" mean in your project?
+A: Every git push triggers Jenkins to automatically
+   pull the code, verify files, run Selenium tests —
+   integrating new code continuously and safely.
+
+Q: What does "Continuous Delivery" mean in your project?
+A: After tests pass, Jenkins automatically builds a
+   Docker image and runs the container — delivering
+   the app to a running state without manual work.
