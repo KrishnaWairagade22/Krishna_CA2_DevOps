@@ -30,10 +30,12 @@ FORM_URL = "file:///" + os.path.abspath(
     os.path.join(os.path.dirname(__file__), "index.html")
 ).replace("\\", "/")
 
-# Delay (in seconds) between each action so you can watch the tests run
-STEP_DELAY = 0.8       # delay between filling each field
-RESULT_DELAY = 2.0     # delay after submit to see the result
-PAGE_DELAY = 1.5       # delay after loading the page
+# In CI (Jenkins/GitHub Actions), delays are set to 0 for speed.
+# Locally, delays are kept so you can visually watch the tests run.
+_in_ci = bool(os.getenv("JENKINS_URL") or os.getenv("GITHUB_ACTIONS") or os.getenv("CI"))
+STEP_DELAY   = 0.0 if _in_ci else 0.8   # delay between filling each field
+RESULT_DELAY = 0.0 if _in_ci else 2.0   # delay after submit to see the result
+PAGE_DELAY   = 0.0 if _in_ci else 1.5   # delay after loading the page
 
 
 def get_driver():
