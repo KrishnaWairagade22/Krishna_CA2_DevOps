@@ -119,6 +119,44 @@ pipeline {
                 """
             }
         }
+
+        // ─────────────────────────────────────────────
+        // STAGE 8 — AIM 8: Build Docker Image via CI
+        // Jenkins builds a Docker image automatically
+        // after tests pass — this is CI + Docker integration
+        // ─────────────────────────────────────────────
+        stage('Docker Build Image') {
+            steps {
+                echo "Building Docker image: student-feedback-form:${APP_VERSION}"
+                bat """
+                    docker build -t student-feedback-form:${APP_VERSION} .
+                    echo [SUCCESS] Docker image built: student-feedback-form:${APP_VERSION}
+                    docker images student-feedback-form
+                """
+            }
+        }
+
+        // ─────────────────────────────────────────────
+        // STAGE 9 — AIM 8: Deploy Docker Container via CI
+        // Jenkins stops old container (if any) and runs
+        // a fresh container from the newly built image
+        // ─────────────────────────────────────────────
+        stage('Docker Deploy Container') {
+            steps {
+                echo "Deploying Docker container from image student-feedback-form:${APP_VERSION}"
+                bat """
+                    :: Stop and remove old container if it exists
+                    docker stop feedback-app 2>nul || echo No old container to stop
+                    docker rm   feedback-app 2>nul || echo No old container to remove
+
+                    :: Run fresh container from the newly built image
+                    docker run -d -p 8081:80 --name feedback-app student-feedback-form:${APP_VERSION}
+
+                    echo [SUCCESS] Container is running!
+                    docker ps --filter name=feedback-app
+                """
+            }
+        }
     }
 
     post {
