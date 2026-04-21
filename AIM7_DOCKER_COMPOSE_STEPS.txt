@@ -1,0 +1,134 @@
+========================================================
+  AIM 7 — MULTI-CONTAINER DOCKER (docker-compose)
+========================================================
+
+AIM: To investigate a multi-container application using Docker.
+
+WHAT WE ARE BUILDING:
+  3 containers running together as one application:
+  ┌────────────────────────────────────────────────────┐
+  │  Container 1: feedback-web     → nginx  (port 8081)│
+  │  Container 2: feedback-db      → MySQL  (port 3306)│
+  │  Container 3: feedback-adminer → Adminer(port 8082)│
+  └────────────────────────────────────────────────────┘
+  All connected via a shared Docker network: feedback-network
+
+--------------------------------------------------------
+PRE-REQUISITE: Docker Desktop must be running (Engine running)
+--------------------------------------------------------
+
+--------------------------------------------------------
+STEP 1 — Navigate to project folder
+--------------------------------------------------------
+
+  cd D:\SEM-VI\DevOps\Krishna_CA2_DevOps
+
+--------------------------------------------------------
+STEP 2 — Verify docker-compose is available
+--------------------------------------------------------
+
+  docker compose version
+
+  Expected: Docker Compose version v2.x.x
+
+--------------------------------------------------------
+STEP 3 — Start all containers with ONE command
+--------------------------------------------------------
+
+  docker compose up -d
+
+  What happens:
+  - Docker reads docker-compose.yml
+  - Pulls mysql:8.0 and adminer images from Docker Hub
+  - Builds the web image from our Dockerfile
+  - Creates the feedback-network
+  - Starts all 3 containers in correct order
+
+  Wait for: "Container feedback-web Started" (all 3 started)
+
+--------------------------------------------------------
+STEP 4 — Verify all 3 containers are running
+--------------------------------------------------------
+
+  docker compose ps
+
+  Expected output:
+  NAME                STATUS          PORTS
+  feedback-web        Up              0.0.0.0:8081->80/tcp
+  feedback-db         Up              0.0.0.0:3306->3306/tcp
+  feedback-adminer    Up              0.0.0.0:8082->8080/tcp
+
+--------------------------------------------------------
+STEP 5 — Open the Web App (Container 1)
+--------------------------------------------------------
+
+  Open browser → http://localhost:8081
+  ✅ Student Feedback Form should appear
+
+--------------------------------------------------------
+STEP 6 — Open Adminer UI (Container 3 — access Container 2)
+--------------------------------------------------------
+
+  Open browser → http://localhost:8082
+
+  Login with:
+    System:   MySQL
+    Server:   db
+    Username: feedback_user
+    Password: pass123
+    Database: feedback_db
+
+  ✅ You can now see the MySQL database from Container 2!
+
+--------------------------------------------------------
+STEP 7 — Show these commands to examiner
+--------------------------------------------------------
+
+  docker compose ps           (show all running containers)
+  docker compose images       (show all images used)
+  docker compose logs         (show logs from all containers)
+  docker network ls           (show the feedback-network)
+  docker volume ls            (show the persistent db-data volume)
+
+--------------------------------------------------------
+STEP 8 — Stop all containers (when done)
+--------------------------------------------------------
+
+  docker compose down
+
+  To also delete the database volume:
+  docker compose down -v
+
+========================================================
+  PRACTICAL IS COMPLETE when:
+  ✅ docker compose ps shows all 3 containers "Up"
+  ✅ http://localhost:8081 opens the feedback form
+  ✅ http://localhost:8082 opens Adminer DB panel
+  ✅ You can login to Adminer and see feedback_db
+========================================================
+
+========================================================
+  VIVA ANSWERS
+========================================================
+
+Q: What is a multi-container application?
+A: An application that runs across multiple Docker containers,
+   each handling a different service (web, database, cache, etc.)
+   and managed together using Docker Compose.
+
+Q: What is docker-compose.yml?
+A: A YAML file that defines all the services, networks, and
+   volumes for a multi-container application. One command
+   (docker compose up) starts everything defined in it.
+
+Q: What is a Docker network?
+A: A virtual network that lets containers communicate with each
+   other using their service names (e.g., "db") instead of IP addresses.
+
+Q: What is a Docker volume?
+A: Persistent storage that survives container restarts. Here,
+   db-data stores MySQL data so it's not lost when container stops.
+
+Q: What does "depends_on" do?
+A: Ensures containers start in the correct order. Here, "web"
+   waits for "db" to start before it begins.

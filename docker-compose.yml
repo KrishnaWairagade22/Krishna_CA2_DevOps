@@ -1,0 +1,63 @@
+# ============================================================
+# docker-compose.yml — Aim 7: Multi-Container Application
+#
+# This file defines a 3-container application stack:
+#
+#   1. web     → nginx serving the Student Feedback Form (port 8081)
+#   2. db      → MySQL database to store feedback data  (port 3306)
+#   3. adminer → Database admin UI to view the DB       (port 8082)
+#
+# All 3 containers run on the same Docker network so
+# they can communicate with each other by service name.
+# ============================================================
+
+version: '3.8'
+
+services:
+
+  # ─── Container 1: Web Application (nginx) ─────────────────
+  web:
+    build: .                         # uses our existing Dockerfile
+    container_name: feedback-web
+    ports:
+      - "8081:80"                    # http://localhost:8081
+    depends_on:
+      - db                           # starts only after db is ready
+    networks:
+      - feedback-network
+
+  # ─── Container 2: MySQL Database ──────────────────────────
+  db:
+    image: mysql:8.0                 # official MySQL image from Docker Hub
+    container_name: feedback-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root123   # root password
+      MYSQL_DATABASE: feedback_db    # auto-creates this database
+      MYSQL_USER: feedback_user      # app user
+      MYSQL_PASSWORD: pass123        # app user password
+    ports:
+      - "3306:3306"                  # MySQL default port
+    volumes:
+      - db-data:/var/lib/mysql       # persist data even if container stops
+    networks:
+      - feedback-network
+
+  # ─── Container 3: Adminer (Database Admin UI) ─────────────
+  adminer:
+    image: adminer                   # lightweight DB admin panel
+    container_name: feedback-adminer
+    ports:
+      - "8082:8080"                  # http://localhost:8082
+    depends_on:
+      - db
+    networks:
+      - feedback-network
+
+# ─── Shared Network ───────────────────────────────────────────
+networks:
+  feedback-network:
+    driver: bridge                   # all containers can talk to each other
+
+# ─── Named Volume (Persistent Storage) ───────────────────────
+volumes:
+  db-data:                           # MySQL data survives container restarts

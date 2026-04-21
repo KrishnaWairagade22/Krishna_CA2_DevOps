@@ -1,0 +1,55 @@
+========================================================
+  AIM 6 — DOCKER STEPS (Run these AFTER PC restart)
+========================================================
+
+BEFORE ANYTHING: Open Docker Desktop from Start Menu
+Wait until you see the whale icon in taskbar (bottom right)
+
+--------------------------------------------------------
+STEP 1 — Verify Docker is working
+--------------------------------------------------------
+Open PowerShell and run:
+
+  docker --version
+
+Expected: Docker version 27.x.x ...
+
+--------------------------------------------------------
+STEP 2 — Build the Docker image
+--------------------------------------------------------
+
+  cd D:\SEM-VI\DevOps\Krishna_CA2_DevOps
+  docker build -t student-feedback-form:1.0 .
+
+Wait for "FINISHED" message.
+
+--------------------------------------------------------
+STEP 3 — Run the container
+--------------------------------------------------------
+
+  docker run -d -p 8081:80 --name feedback-app student-feedback-form:1.0
+
+--------------------------------------------------------
+STEP 4 — Open the app in browser
+--------------------------------------------------------
+
+  Open browser → go to:  http://localhost:8081
+
+  Your Student Feedback Form should appear! ✅
+
+--------------------------------------------------------
+STEP 5 — Show these commands to examiner
+--------------------------------------------------------
+
+  docker ps                   (show running containers)
+  docker images               (show built images)
+  docker logs feedback-app    (show nginx logs)
+  docker stop feedback-app    (stop the container)
+  docker start feedback-app   (start it again)
+
+========================================================
+  PRACTICAL IS COMPLETE when:
+  ✅ docker images shows student-feedback-form:1.0
+  ✅ docker ps shows feedback-app as "Up"
+  ✅ http://localhost:8081 opens the form in browser
+========================================================

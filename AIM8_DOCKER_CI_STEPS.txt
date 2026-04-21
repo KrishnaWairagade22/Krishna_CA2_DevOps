@@ -1,0 +1,154 @@
+========================================================
+  AIM 8 — INTEGRATE DOCKER WITH CI PIPELINE (Jenkins)
+========================================================
+
+AIM: To explore and integrate Docker with CI pipelines.
+
+WHAT THIS PRACTICAL DOES:
+  The Jenkins CI pipeline now has 9 stages total:
+  ┌──────────────────────────────────────────────────────┐
+  │  Stage 1: Checkout          → Pull code from GitHub  │
+  │  Stage 2: Build             → Verify files exist     │
+  │  Stage 3: Setup Venv        → Create Python env      │
+  │  Stage 4: Install Deps      → pip install packages   │
+  │  Stage 5: Prepare Reports   → Create reports folder  │
+  │  Stage 6: Run Selenium Tests→ Automated testing      │
+  │  Stage 7: Deploy            → Copy files locally     │
+  │  Stage 8: Docker Build Image→ Build Docker image ★  │
+  │  Stage 9: Docker Deploy     → Run Docker container ★│
+  └──────────────────────────────────────────────────────┘
+  ★ = NEW stages added for Aim 8
+
+HOW CI + DOCKER WORKS TOGETHER:
+  Code pushed to GitHub
+        ↓
+  Jenkins pulls code (Stage 1)
+        ↓
+  Tests run automatically (Stages 2–6)
+        ↓
+  If tests PASS → Jenkins builds Docker image (Stage 8)
+        ↓
+  Jenkins runs Docker container (Stage 9)
+        ↓
+  App is LIVE at http://localhost:8081 ✅
+
+========================================================
+  PRE-REQUISITES (make sure these are running):
+  1. Docker Desktop is open and Engine is running
+  2. Jenkins is running at http://localhost:8080
+========================================================
+
+--------------------------------------------------------
+STEP 1 — Push updated Jenkinsfile to GitHub
+--------------------------------------------------------
+
+Open PowerShell in your project folder:
+
+  cd D:\SEM-VI\DevOps\Krishna_CA2_DevOps
+
+Run these git commands:
+
+  git add Jenkinsfile
+  git commit -m "Aim 8: Integrate Docker with CI pipeline"
+  git push origin master
+
+--------------------------------------------------------
+STEP 2 — Open Jenkins and Trigger the Pipeline
+--------------------------------------------------------
+
+  Open browser → http://localhost:8080
+  Click on your pipeline job (e.g., "Krishna_CA2_DevOps")
+  Click "Build Now" on the left side
+
+--------------------------------------------------------
+STEP 3 — Watch the Pipeline Run (9 Stages)
+--------------------------------------------------------
+
+  Click on the build number (e.g., #7) → Click "Console Output"
+  
+  Watch each stage complete:
+  ✅ Checkout
+  ✅ Build
+  ✅ Setup Virtual Environment
+  ✅ Install Dependencies
+  ✅ Prepare Reports Directory
+  ✅ Run Selenium Tests
+  ✅ Deploy
+  ✅ Docker Build Image        ← NEW (Aim 8)
+  ✅ Docker Deploy Container   ← NEW (Aim 8)
+
+--------------------------------------------------------
+STEP 4 — Verify Docker container was created by Jenkins
+--------------------------------------------------------
+
+Open PowerShell and run:
+
+  docker ps
+
+Expected output:
+  CONTAINER ID   IMAGE                              PORTS
+  xxxxxxxxxxxx   student-feedback-form:1.0.7        0.0.0.0:8081->80/tcp
+
+  docker images student-feedback-form
+
+Expected output:
+  REPOSITORY              TAG       IMAGE ID
+  student-feedback-form   1.0.7     xxxxxxxxxxxx
+
+--------------------------------------------------------
+STEP 5 — Open the app (deployed by Jenkins via Docker)
+--------------------------------------------------------
+
+  Open browser → http://localhost:8081
+  ✅ Student Feedback Form appears — deployed by Jenkins!
+
+--------------------------------------------------------
+STEP 6 — Show Examiner the Stage View in Jenkins
+--------------------------------------------------------
+
+  In Jenkins → Click your build → Click "Stage View"
+  It shows all 9 stages as a visual pipeline with timings.
+
+  Also show:
+    docker ps           (container started by Jenkins)
+    docker images       (image built by Jenkins)
+
+========================================================
+  PRACTICAL IS COMPLETE when:
+  ✅ Jenkins pipeline shows all 9 stages GREEN
+  ✅ docker images shows student-feedback-form:1.0.X
+  ✅ docker ps shows feedback-app as "Up"
+  ✅ http://localhost:8081 shows the form
+========================================================
+
+========================================================
+  VIVA ANSWERS
+========================================================
+
+Q: What is the aim of Practical 8?
+A: To integrate Docker with a CI (Continuous Integration)
+   pipeline using Jenkins, so that every code change
+   automatically builds a Docker image and deploys it.
+
+Q: What is CI/CD?
+A: CI = Continuous Integration → automatically test code on
+   every commit. CD = Continuous Delivery → automatically
+   deploy after tests pass.
+
+Q: How does Docker integrate with Jenkins here?
+A: Jenkins pipeline stages 8 and 9 run docker commands —
+   "docker build" creates a new image and "docker run"
+   deploys it as a container. This happens automatically
+   without any manual steps.
+
+Q: What is the benefit of this integration?
+A: Every code push to GitHub triggers:
+   1. Automated testing (Selenium)
+   2. Automated Docker image build
+   3. Automated container deployment
+   This eliminates manual steps and ensures consistency.
+
+Q: What is APP_VERSION in the pipeline?
+A: It combines "1.0." with Jenkins BUILD_NUMBER, so each
+   pipeline run creates a uniquely tagged Docker image
+   (e.g., 1.0.7, 1.0.8) — enabling version tracking.
